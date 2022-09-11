@@ -1,0 +1,10 @@
+/logs/
+jupyter-notebooks/batch/*
+jupyter-notebooks/.ipynb_checkpoints
+.env
+dags/twitter/__pycache__/
+dags/sales/__pycache__/
+plugins/__pycache__/
+plugins/operators/__pycache__/
+plugins/helpers/__pycache__/
+plugins/hooks/__pycache__/
