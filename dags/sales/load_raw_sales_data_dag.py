@@ -27,7 +27,7 @@ default_args = {
 }
 
 dag = DAG(
-    "treat_and_load_files",
+    "load_raw_sales_data",
     default_args=default_args,
     description="WIP",
     max_active_runs=1,
@@ -60,12 +60,36 @@ load_raw_table_csv_task = GCSToBigQueryOperator(
     source_objects=GCSHook(gcp_conn_id="gcp_boticario_de_case").list(bucket_name=destination_sales_data_bucket, delimiter=".csv"),
     destination_project_dataset_table=f"{bigquery_project}.{raw_sales_dataset}.{raw_sales_table}",
     schema_fields=[
-        {"name": "ID_MARCA", "type": "INT64", "mode": "NULLABLE"},
-        {"name": "MARCA", "type": "STRING", "mode": "NULLABLE"},
-        {"name": "ID_LINHA", "type": "INT64", "mode": "NULLABLE"},
-        {"name": "LINHA", "type": "STRING", "mode": "NULLABLE"},
-        {"name": "DATA_VENDA", "type": "DATE", "mode": "NULLABLE"},
-        {"name": "QTD_VENDA", "type": "INT64", "mode": "NULLABLE"},
+        {
+            "name": "ID_MARCA", 
+            "type": "INT64", 
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "MARCA", 
+            "type": "STRING", 
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "ID_LINHA", 
+            "type": "INT64", 
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "LINHA", 
+            "type": "STRING", 
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "DATA_VENDA", 
+            "type": "DATE", 
+            "mode": "NULLABLE"
+        },
+        {
+            "name": "QTD_VENDA", 
+            "type": "INT64", 
+            "mode": "NULLABLE"
+        },
     ],
     create_disposition="CREATE_IF_NEEDED",
     write_disposition="WRITE_TRUNCATE",

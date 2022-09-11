@@ -70,4 +70,18 @@ class SqlQueries:
         QUALIFY
             ROW_NUMBER() OVER(ORDER BY sold_units_amount DESC) = 1
     """
+
+    SILVER_TWEETS_QUERY = """
+        SELECT
+            id,
+            author_id,
+            created_at,
+            text,
+            searched_product,
+            public_metrics
+        FROM
+            raw__twitter.tweets
+        QUALIFY
+            ROW_NUMBER() OVER(PARTITION BY id ORDER BY ingested_at DESC) = 1
+    """
  

@@ -12,16 +12,12 @@ class GetTopSoldProductHook(BaseHook):
     def __init__(
         self,
         gcp_conn_id="",
-        month="",
-        year="",
         *args, 
         **kwargs
     ):
 
         super(GetTopSoldProductHook, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
-        self.month=month
-        self.year=year
 
     @staticmethod
     def _fill_query(month, year):
@@ -34,12 +30,15 @@ class GetTopSoldProductHook(BaseHook):
         
         return query 
 
-    def return_top_product(self):
-        query = self._fill_query(self.month, self.year)
+    def return_top_product(self, month, year):
+        query = self._fill_query(month=month, year=year)
         bigquery_hook = BigQueryHook(gcp_conn_id=self.gcp_conn_id, use_legacy_sql=False)
         conn = bigquery_hook.get_conn()
         cursor = conn.cursor()
         cursor.execute(query)
         results = cursor.fetchall()
 
-        return results[0][0]
+        if len(results[0]) > 0: 
+            return results[0][0]
+        else:
+            raise Exception("Unable to retrieve the top sold product for the requested period.")
