@@ -31,10 +31,8 @@ class TreatXLSXOperator(BaseOperator):
     def execute(self, context):
         gcs_hook = GCSHook(gcp_conn_id=self.gcp_conn_id)
         list_of_files = gcs_hook.list(bucket_name=self.source_bucket)
-        logging.info(f"(Starting to treat {list_of_files}")
 
         for file_name in list_of_files:
-            logging.info(f"Treating {file_name}")
             file_data = gcs_hook.download(bucket_name=self.source_bucket, object_name=file_name)   
             
             dataframe = pd.read_excel(file_data, engine="openpyxl")

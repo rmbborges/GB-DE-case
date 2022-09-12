@@ -5,7 +5,7 @@ class SqlQueries:
             EXTRACT(MONTH FROM DATA_VENDA) AS month,
             SUM(QTD_VENDA) AS sold_units_amount
         FROM
-            raw__sales.sales
+            ${raw_sales_dataset}.${raw_sales_table}
         GROUP BY 
             year,
             month
@@ -19,7 +19,7 @@ class SqlQueries:
             LINHA AS product_name,
             SUM(QTD_VENDA) AS sold_units_amount
         FROM
-            raw__sales.sales
+            ${raw_sales_dataset}.${raw_sales_table}
         GROUP BY 
             brand_id,
             brand_name,
@@ -35,7 +35,7 @@ class SqlQueries:
             MARCA AS brand_name,
             SUM(QTD_VENDA) AS sold_units_amount
         FROM
-            raw__sales.sales
+            ${raw_sales_dataset}.${raw_sales_table}
         GROUP BY 
             year,
             month,
@@ -51,7 +51,7 @@ class SqlQueries:
             LINHA AS product_name,
             SUM(QTD_VENDA) AS sold_units_amount
         FROM
-            raw__sales.sales
+            ${raw_sales_dataset}.${raw_sales_table}
         GROUP BY 
             year,
             month,
@@ -63,7 +63,7 @@ class SqlQueries:
         SELECT
             product_name
         FROM
-            silver__sales.product_monthly_sales
+            ${datawarehouse_sales_dataset}.product_monthly_sales
         WHERE 
             year = ${year}
             AND month = ${month}
@@ -71,7 +71,7 @@ class SqlQueries:
             ROW_NUMBER() OVER(ORDER BY sold_units_amount DESC) = 1
     """
 
-    SILVER_TWEETS_QUERY = """
+    DATAWAREHOUSE_TWEETS_QUERY = """
         SELECT
             id,
             author_id,
@@ -80,7 +80,7 @@ class SqlQueries:
             searched_product,
             public_metrics
         FROM
-            raw__twitter.tweets
+            ${raw_twitter_dataset}.${raw_tweets_table}
         QUALIFY
             ROW_NUMBER() OVER(PARTITION BY id ORDER BY ingested_at DESC) = 1
     """

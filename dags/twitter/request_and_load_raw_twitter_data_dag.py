@@ -13,6 +13,8 @@ import datetime
 
 destination_twitter_bucket = Variable.get("twitter_data_bucket")
 bigquery_project = Variable.get("bigquery_project_id")
+
+datawarehouse_sales_dataset = Variable.get("datawarehouse_sales_dataset") 
 raw_twitter_dataset = Variable.get("raw_twitter_dataset") 
 raw_tweets_table = Variable.get("raw_tweets_table") 
 
@@ -20,7 +22,7 @@ default_args = {
     "owner": "ricardo",
     "start_date": datetime.datetime.now(),
     "depends_on_past": False,
-    "retries": 0,
+    "retries": 1,
     "retry_delay": 60,
     "catchup": False,
     "email_on_retry": False
@@ -38,7 +40,7 @@ request_twitter_data_task = RequestTwitterDataOperator(
     task_id="request_twitter_data",
     dag=dag,
     gcp_conn_id="gcp_boticario_de_case",
-    product=GetTopSoldProductHook(gcp_conn_id="gcp_boticario_de_case").return_top_product(month=12, year=2019),
+    product=GetTopSoldProductHook(gcp_conn_id="gcp_boticario_de_case", datawarehouse_sales_dataset=datawarehouse_sales_dataset).return_top_product(month=12, year=2019),
     destination_bucket=destination_twitter_bucket,
     lang="pt",
 )

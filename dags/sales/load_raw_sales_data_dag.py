@@ -21,7 +21,6 @@ default_args = {
     "start_date": datetime.datetime.now(),
     "depends_on_past": False,
     "retries": 0,
-    "retry_delay": 60,
     "catchup": False,
     "email_on_retry": False
 }
